@@ -1,0 +1,22 @@
+[package]
+name = "yahoo-finance"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+chrono = "0.4"
+chrono-tz = "0.8"
+clap = { version = "4.4", features = ["derive"] }
+duckdb = { version = "1.0", features = ["bundled"] }
+yfinance-rs = "0.7.2"
+tokio = { version = "1", features = ["full"] }
+paft = { version = "0.7.1", features = ["market"] }
+polars = { version = "0.52.0", features = [
+    "lazy",
+    "json",
+    "temporal",
+    "dtype-datetime",
+    "timezones",
+    "fmt",
+] }
+serde_json = "1.0.149"
