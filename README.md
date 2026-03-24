@@ -81,4 +81,100 @@ cargo run -- options -s AAPL TSLA --timezone PST
 
   - Delta
   - Gamma
-  - Thet
+  - Theta
+  - Vega
+  - Black-Scholes price
+
+- Uses ^TNX (10Y Treasury) as risk-free rate
+
+---
+
+## Output
+
+All commands print JSON to stdout.
+
+Example:
+
+```json
+[
+  {
+    "symbol": "AAPL",
+    "date": "2024-01-01T00:00:00",
+    "close": 190.23
+  }
+]
+```
+
+Designed for piping into Python or other systems:
+
+```bash
+cargo run -- get-candles -s AAPL | python process.py
+```
+
+---
+
+## Project Structure
+
+```
+src/
+├── main.rs        # CLI entry point
+├── candles.rs     # Candle download + caching + DB
+├── options.rs     # Options chain + Greeks
+├── greeks.rs      # Greeks calculations
+├── utils.rs       # Helpers (timezone, JSON, parsing)
+```
+
+---
+
+## Database
+
+Uses DuckDB for local storage.
+
+### Candles Table
+
+- Stores OHLCV data
+- Primary key: `(date, ticker)`
+
+### Options Table
+
+- Stores full option chain + Greeks
+- Primary key: `(contract_symbol, collected_at)`
+
+Database file:
+
+```
+rust_candles.db
+```
+
+---
+
+## Key Design Choices
+
+- **Polars** for fast DataFrame operations
+- **DuckDB** for embedded analytics storage
+- **Tokio + JoinSet** for concurrent downloads
+- **Chunked downloads** to bypass Yahoo limits
+- **Lazy evaluation** for efficient transformations
+
+---
+
+## Notes
+
+- Intraday data does not support `Range::Max` (falls back to `5d`)
+- Missing or stale symbols are automatically refreshed
+- Timezones are converted after loading into Polars
+
+---
+
+## Future Improvements
+
+- Multiple expiration support for options
+- Streaming / real-time updates
+- Backtesting integration
+- More advanced filtering (IV rank, liquidity, etc.)
+
+---
+
+## License
+
+MIT (or specify your license)
