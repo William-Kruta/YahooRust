@@ -3,6 +3,14 @@ name = "yahoo-finance"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "yahoo_finance"
+path = "src/lib.rs"
+
+[[bin]]
+name = "yahoo-finance"
+path = "src/main.rs"
+
 [dependencies]
 chrono = "0.4"
 chrono-tz = "0.8"
@@ -10,13 +18,23 @@ clap = { version = "4.4", features = ["derive"] }
 duckdb = { version = "1.0", features = ["bundled"] }
 yfinance-rs = "0.7.2"
 tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "cookies"] }
 paft = { version = "0.7.1", features = ["market"] }
-polars = { version = "0.52.0", features = [
+polars = { version = "=0.50.0", features = [
+    "diff",
     "lazy",
     "json",
     "temporal",
     "dtype-datetime",
     "timezones",
     "fmt",
+    "rolling_window",
+    "ewma",
+    "pivot",
+    "strings",
+    "dtype-i8",
+    "concat_str",
+    "round_series",
 ] }
 serde_json = "1.0.149"
+serde = "1.0.228"
